@@ -1,0 +1,81 @@
+bird9.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.35
+BLayer 1 copy
+bounds:260,962,56,87
+rotate:90
+BLayer 27 copy
+bounds:260,962,56,87
+rotate:90
+BLayer 14 copy
+bounds:745,927,91,144
+rotate:90
+BLayer 15 copy
+bounds:258,802,137,141
+rotate:90
+BLayer 21 copy
+bounds:60,984,49,34
+BLayer 5 copy
+bounds:2,670,173,215
+rotate:90
+skin1/Layer 1
+bounds:186,975,43,72
+rotate:90
+skin2/Layer 1
+bounds:186,975,43,72
+rotate:90
+skin3/Layer 1
+bounds:186,975,43,72
+rotate:90
+skin1/Layer 14
+bounds:349,941,77,130
+rotate:90
+skin1/Layer 15
+bounds:891,895,123,127
+rotate:90
+skin1/Layer 21
+bounds:23,998,35,20
+skin2/Layer 21
+bounds:23,998,35,20
+skin3/Layer 21
+bounds:23,998,35,20
+skin1/Layer 24
+bounds:2,1000,18,19
+rotate:90
+skin2/Layer 24
+bounds:2,1000,18,19
+rotate:90
+skin3/Layer 24
+bounds:2,1000,18,19
+rotate:90
+skin1/Layer 26
+bounds:111,976,42,73
+rotate:90
+skin2/Layer 26
+bounds:111,976,42,73
+rotate:90
+skin3/Layer 26
+bounds:111,976,42,73
+rotate:90
+skin1/Layer 5
+bounds:401,779,159,201
+rotate:90
+skin2/Layer 14
+bounds:481,940,78,130
+rotate:90
+skin2/Layer 15
+bounds:2,850,124,128
+rotate:90
+skin2/Layer 5
+bounds:604,766,159,202
+rotate:90
+skin3/Layer 14
+bounds:613,940,78,130
+rotate:90
+skin3/Layer 15
+bounds:132,845,124,128
+skin3/Layer 5
+bounds:808,734,159,202
+rotate:90

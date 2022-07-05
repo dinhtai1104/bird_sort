@@ -1,0 +1,26 @@
+{
+    "branch": 7,
+    "max": 4,
+    "pieces": [
+        {"id": 1,"type":4,"branch":1,"possition":1},
+        {"id": 2,"type":6,"branch":1,"possition":2},
+        {"id": 3,"type":2,"branch":1,"possition":3},
+        {"id": 4,"type":6,"branch":1,"possition":4},
+        {"id": 5,"type":2,"branch":2,"possition":1},
+        {"id": 6,"type":1,"branch":2,"possition":2},
+        {"id": 7,"type":6,"branch":2,"possition":3},
+        {"id": 8,"type":5,"branch":2,"possition":4},
+        {"id": 9,"type":2,"branch":3,"possition":1},
+        {"id": 10,"type":5,"branch":3,"possition":2},
+        {"id": 11,"type":1,"branch":3,"possition":3},
+        {"id": 12,"type":4,"branch":3,"possition":4},
+        {"id": 13,"type":6,"branch":4,"possition":1},
+        {"id": 14,"type":1,"branch":4,"possition":2},
+        {"id": 15,"type":4,"branch":4,"possition":3},
+        {"id": 16,"type":4,"branch":4,"possition":4},
+        {"id": 17,"type":2,"branch":5,"possition":1},
+        {"id": 18,"type":1,"branch":5,"possition":2},
+        {"id": 19,"type":5,"branch":5,"possition":3},
+        {"id": 20,"type":5,"branch":5,"possition":4}
+    ]
+}

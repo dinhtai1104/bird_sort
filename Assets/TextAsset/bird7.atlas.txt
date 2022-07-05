@@ -1,0 +1,71 @@
+bird7.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.35
+BLayer 1 copy
+bounds:2,765,117,254
+BLayer 14 copy
+bounds:2,2,35,48
+rotate:90
+BLayer 15 copy
+bounds:121,850,97,169
+BLayer 16 copy 2
+bounds:123,6,57,86
+rotate:90
+BLayer 17 copy
+bounds:107,619,118,144
+BLayer 9 copy
+bounds:211,7,56,87
+rotate:90
+skin1/Layer 1
+bounds:2,523,103,240
+skin1/Layer 12
+bounds:220,862,25,25
+skin2/Layer 12
+bounds:220,862,25,25
+skin3/Layer 12
+bounds:220,862,25,25
+skin1/Layer 14
+bounds:100,3,21,34
+skin1/Layer 15
+bounds:121,765,83,155
+rotate:90
+skin1/Layer 16 copy
+bounds:227,645,43,72
+rotate:90
+skin1/Layer 17
+bounds:107,223,104,130
+skin1/Layer 17 copy
+bounds:107,355,104,130
+skin1/Layer 9
+bounds:272,690,42,73
+skin2/Layer 1
+bounds:2,281,103,240
+skin2/Layer 14
+bounds:52,2,22,35
+skin2/Layer 15
+bounds:107,65,84,156
+skin2/Layer 16 copy
+bounds:214,498,43,73
+rotate:90
+skin2/Layer 17 copy
+bounds:220,889,105,130
+skin2/Layer 17
+bounds:220,889,105,130
+skin2/Layer 9
+bounds:213,411,43,74
+skin3/Layer 1
+bounds:2,39,103,240
+skin3/Layer 14
+bounds:76,2,22,35
+skin3/Layer 15
+bounds:193,65,84,156
+skin3/Layer 16 copy
+bounds:227,690,43,73
+skin3/Layer 17 copy
+bounds:107,487,105,130
+skin3/Layer 17
+bounds:107,487,105,130
+skin3/Layer 9
+bounds:214,543,43,74

@@ -1,0 +1,14 @@
+{
+    "branch": 3,
+    "max": 4,
+    "pieces": [
+        {"id": 1,"type":9,"branch":1,"possition":1},
+        {"id": 2,"type":9,"branch":1,"possition":2},
+        {"id": 3,"type":5,"branch":1,"possition":3},
+        {"id": 4,"type":5,"branch":2,"possition":1},
+        {"id": 5,"type":5,"branch":2,"possition":2},
+        {"id": 6,"type":5,"branch":2,"possition":3},
+        {"id": 7,"type":9,"branch":3,"possition":1},
+        {"id": 8,"type":9,"branch":3,"possition":2}
+    ]
+}

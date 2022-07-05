@@ -1,0 +1,67 @@
+bird8.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.35
+Bbody copy
+bounds:398,629,162,210
+rotate:90
+Bleg1 copy
+bounds:526,953,56,87
+rotate:90
+Bmouth copy
+bounds:197,974,100,35
+Btail copy
+bounds:2,895,91,144
+rotate:90
+Bwing1 copy
+bounds:537,793,137,141
+rotate:90
+skin1/body
+bounds:680,781,148,196
+rotate:90
+skin1/eye
+bounds:2,992,17,17
+skin2/eye
+bounds:2,992,17,17
+skin3/eye
+bounds:2,992,17,17
+skin1/leg1
+bounds:299,967,42,73
+rotate:90
+skin1/mouth
+bounds:21,988,86,21
+skin1/tail
+bounds:615,932,77,130
+rotate:90
+skin1/wing1
+bounds:148,849,123,127
+rotate:90
+skin2/body
+bounds:2,698,149,196
+rotate:90
+skin2/leg1
+bounds:374,966,43,74
+rotate:90
+skin2/mouth
+bounds:109,988,86,21
+skin3/mouth
+bounds:109,988,86,21
+skin2/tail
+bounds:747,931,78,130
+rotate:90
+skin2/wing1
+bounds:277,840,124,128
+rotate:90
+skin3/body
+bounds:200,689,149,196
+rotate:90
+skin3/leg1
+bounds:450,966,43,74
+rotate:90
+skin3/tail
+bounds:879,931,78,130
+rotate:90
+skin3/wing1
+bounds:407,827,124,128
+rotate:90

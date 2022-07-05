@@ -1,0 +1,10 @@
+{
+    "branch": 2,
+    "max": 4,
+    "pieces": [
+        {"id": 1,"type":9,"branch":1,"possition":1},
+        {"id": 2,"type":9,"branch":1,"possition":2},
+        {"id": 3,"type":9,"branch":2,"possition":1},
+        {"id": 4,"type":9,"branch":2,"possition":2}
+    ]
+}

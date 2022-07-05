@@ -1,0 +1,65 @@
+bird1.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.35
+Bbody copy
+bounds:2,821,163,200
+Bleg1 copy
+bounds:137,2,56,87
+Bleg2 copy
+bounds:195,3,57,86
+Btail copy
+bounds:2,84,97,169
+Bwing1 copy
+bounds:101,91,133,162
+skin1/Bwing1
+bounds:239,671,119,148
+skin1/wing1
+bounds:239,671,119,148
+skin1/body
+bounds:2,255,149,186
+skin1/eye
+bounds:253,869,25,25
+skin1/leg1
+bounds:167,821,42,73
+rotate:90
+skin1/leg2
+bounds:198,281,43,72
+skin1/mouth
+bounds:253,896,39,61
+skin1/tail
+bounds:153,506,83,155
+skin2/Bwing1
+bounds:153,355,119,149
+skin2/wing1
+bounds:153,355,119,149
+skin2/body
+bounds:2,632,149,187
+skin2/eye
+bounds:280,869,25,25
+skin2/leg1
+bounds:2,8,43,74
+skin2/leg2
+bounds:92,9,43,73
+skin2/mouth
+bounds:242,823,40,62
+rotate:90
+skin2/tail
+bounds:153,663,84,156
+skin3/Bwing1
+bounds:238,512,119,149
+skin3/wing1
+bounds:238,512,119,149
+skin3/body
+bounds:2,443,149,187
+skin3/eye
+bounds:306,842,25,25
+skin3/leg1
+bounds:47,8,43,74
+skin3/leg2
+bounds:153,280,43,73
+skin3/mouth
+bounds:253,959,40,62
+skin3/tail
+bounds:167,865,84,156

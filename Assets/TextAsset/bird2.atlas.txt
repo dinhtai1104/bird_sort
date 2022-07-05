@@ -1,0 +1,111 @@
+bird2.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.35
+B1
+bounds:2,146,119,169
+B2
+bounds:310,328,135,94
+B4
+bounds:137,459,56,87
+rotate:90
+B6
+bounds:2,12,106,132
+B7
+bounds:2,439,133,198
+B9
+bounds:123,111,43,30
+rotate:90
+skin1/Layer 1
+bounds:123,156,42,51
+skin1/Layer 1 copy
+bounds:280,473,42,51
+rotate:90
+skin1/Layer 2
+bounds:226,462,9,8
+skin2/Layer 2
+bounds:226,462,9,8
+skin1/Layer 2 copy
+bounds:324,520,9,10
+rotate:90
+skin2/Layer 2 copy
+bounds:324,520,9,10
+rotate:90
+skin1/body
+bounds:189,273,119,184
+skin1/eye
+bounds:310,301,25,25
+skin2/eye
+bounds:310,301,25,25
+skin3/eye
+bounds:310,301,25,25
+skin1/leg1
+bounds:167,146,29,16
+rotate:90
+skin1/leg1 copy
+bounds:168,222,29,16
+rotate:90
+skin1/mouth
+bounds:493,450,121,80
+skin1/tail
+bounds:155,26,92,118
+skin1/wing1
+bounds:482,532,105,155
+rotate:90
+skin1/wing1 copy
+bounds:336,424,105,155
+rotate:90
+skin2/Layer 1
+bounds:123,209,43,52
+skin2/Layer 1 copy
+bounds:123,263,43,52
+skin2/body
+bounds:2,317,120,185
+rotate:90
+skin2/leg1
+bounds:168,285,30,17
+rotate:90
+skin2/leg1 copy
+bounds:137,440,30,17
+skin2/mouth
+bounds:249,41,122,81
+rotate:90
+skin2/tail
+bounds:345,208,93,118
+skin2/wing1 copy
+bounds:324,531,106,156
+rotate:90
+skin2/wing1
+bounds:324,531,106,156
+rotate:90
+skin3/Layer 1 copy
+bounds:226,472,43,52
+rotate:90
+skin3/Layer 1
+bounds:226,472,43,52
+rotate:90
+skin3/Layer 2
+bounds:280,462,10,9
+skin3/Layer 2 copy
+bounds:169,446,10,11
+skin3/body
+bounds:137,517,120,185
+rotate:90
+skin3/leg1
+bounds:167,177,30,17
+rotate:90
+skin3/leg1 copy
+bounds:168,253,30,17
+rotate:90
+skin3/mouth
+bounds:447,341,122,81
+skin3/tail
+bounds:345,113,93,118
+rotate:90
+skin3/wing1 copy
+bounds:187,165,106,156
+rotate:90
+skin3/wing1
+bounds:187,165,106,156
+rotate:90
