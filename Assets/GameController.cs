@@ -1,20 +1,35 @@
-﻿using System.Collections;
+﻿using Action = System.Action;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum STATE
+{
+    MOVING, NONE
+}
 public class GameController : MonoBehaviour
 {
     public static GameController Instance;
     public BranchController currentTouchBranch;
 
     public LayerMask branchLayerMask;
+    public LevelManager levelManger;
+    public STATE state = STATE.NONE;
+    public Stack<Action> listMovement = new Stack<Action>();
+    public int pLevel;
+
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        pLevel = PlayerPrefs.GetInt("Level", 1);
+    }
+
     private void Update()
     {
+        //if (state == STATE.MOVING) return;
         if (Input.GetMouseButtonDown(0))
         {
             Vector2 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -26,7 +41,7 @@ public class GameController : MonoBehaviour
                 {
                     if (currentTouchBranch == null)
                     {
-                        if (!branch.IsEmpty())
+                        if (!branch.IsEmpty() && !branch.CheckFullBranchWithSameBird())
                         {
                             Debug.Log("Set new branch");
                             currentTouchBranch = branch;
@@ -46,8 +61,9 @@ public class GameController : MonoBehaviour
                         {
                             Debug.Log("Add Bird");
                             // Day la luot touch thu hai
-                            currentTouchBranch.HighlightBird(false);
                             branch.AddBirdFromOtherBranch(currentTouchBranch);
+                            currentTouchBranch.HighlightBird(false);
+                            branch.HighlightBird(false);
                             currentTouchBranch = null;
                         }
                     }
@@ -56,4 +72,59 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void LoadLevel()
+    {
+        levelManger.LoadLevel(pLevel);
+    }
+
+    public void AddMovement(Action action)
+    {
+        if (listMovement == null)
+        {
+            listMovement = new Stack<Action>();
+        }
+        listMovement.Push(action);
+        UiController.Instance.UpdateUndoBtn(true);
+    }
+
+    public void Undo()
+    {
+        if (currentTouchBranch)
+        {
+            currentTouchBranch.HighlightBird(false);
+            currentTouchBranch = null;
+        }
+        if (listMovement.Count > 0)
+        {
+            Action undo = listMovement.Pop();
+            undo?.Invoke();
+            if (listMovement.Count == 0)
+            {
+                UiController.Instance.UpdateUndoBtn(false);
+            }
+        }
+    }
+
+    public void ClearUndoSystem()
+    {
+        listMovement.Clear();
+        if (listMovement.Count == 0)
+        {
+            UiController.Instance.UpdateUndoBtn(false);
+        }
+    }
+
+    public void AddNewBranch()
+    {
+        levelManger.AddNewBranch();
+    }
+
+    public void ShuffleBird()
+    {
+    }
+   
+    public void ReplayGame()
+    {
+        LoadLevel();
+    }
 }
