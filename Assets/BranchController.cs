@@ -5,7 +5,7 @@ using UnityEngine;
 public class BranchController : MonoBehaviour
 {
     public List<Transform> listSlotPosBirds;
-    private List<BirdController> listBirdsOnBranch;
+    private List<BirdController> listBirdsOnBranch = new List<BirdController>();
     private int numberOfBirdsInBranch;
     public BirdController birdPrefab;
     public Transform spawnPos;
@@ -14,11 +14,11 @@ public class BranchController : MonoBehaviour
 
     private void Start()
     {
-        listBirdsOnBranch = new List<BirdController>();
-        for (int i = 0; i < 2; i++)
-        {
-            AddBirdOnStart();
-        }
+        //listBirdsOnBranch = new List<BirdController>();
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    AddBirdOnStart();
+        //}
     }
 
     public void AddBirdOnStart()
@@ -66,11 +66,15 @@ public class BranchController : MonoBehaviour
 
     public void AddBirdToSlotInit(BirdController bird, int slot, bool firstBird = false)
     {
+        if (listBirdsOnBranch == null)
+        {
+            listBirdsOnBranch = new List<BirdController>();
+        }
         System.Action callback = () =>
         {
             animator.SetTrigger("touch");
         };
-        bird.FlyToPosition(listSlotPosBirds[slot - 1].localPosition, this, firstBird ? callback : null);
+        bird.FlyToPosition(listSlotPosBirds[slot].localPosition, this, firstBird ? callback : null);
         listBirdsOnBranch.Add(bird);
         numberOfBirdsInBranch++;
     }

@@ -35,7 +35,7 @@ public class LevelManager : MonoBehaviour
             {
                 if (p.branch == i + 1)
                 {
-                    BirdController bird = Instantiate(branch.birdPrefab, Vector3.one * 100, Quaternion.identity);
+                    BirdController bird = Instantiate(branch.birdPrefab, branch.spawnPos.position, Quaternion.identity);
                     branch.AddBirdToSlotInit(bird, p.possition - 1, firstBird);
                     if (firstBird)
                     {
