@@ -34,8 +34,8 @@ public class LevelManager : MonoBehaviour
 
         float orthorSize = Camera.main.orthographicSize;
         float width = Camera.main.aspect * Camera.main.orthographicSize;
-        startSpawnBranchLeft.position = new Vector2(-width - 0.3f, startSpawnBranchLeft.position.y);
-        startSpawnBranchRight.position = new Vector2(width + 0.3f, startSpawnBranchRight.position.y);
+        startSpawnBranchLeft.position = new Vector2(-width - 0.5f, startSpawnBranchLeft.position.y);
+        startSpawnBranchRight.position = new Vector2(width + 0.5f, startSpawnBranchRight.position.y);
     }
 
     public int getTotalBranch() => listBranchInLevel.Count;
@@ -188,6 +188,35 @@ public class LevelManager : MonoBehaviour
         UiController.Instance.DisableButtonsJoinGame();
     }
 
+    public void CloseAllHightLighTut()
+    {
+        for (int i = 0; i < listBranchInLevel.Count; i++)
+        {
+            listBranchInLevel[i].branchTutorial.DisableAll();
+        }
+    }
+
+    public void OpenHighLightTut(int id, BranchController branchController)
+    {
+        for (int i = 0; i < listBranchInLevel.Count; i++)
+        {
+            if (branchController != listBranchInLevel[i])
+            {
+                if (listBranchInLevel[i].GetCountBird() == 0)
+                {
+                    listBranchInLevel[i].branchTutorial.ActiveV();
+                    continue;
+                }
+                if (listBranchInLevel[i].GetLastId() == id)
+                {
+                    listBranchInLevel[i].branchTutorial.ActiveV();
+                } else
+                {
+                    listBranchInLevel[i].branchTutorial.ActiveX();
+                }
+            }
+        }
+    }
 
     IEnumerator WaitForAction(float time, System.Action ac)
     {

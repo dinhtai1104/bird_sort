@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 public enum STATE
 {
     MOVING, NONE
@@ -124,9 +126,19 @@ public class GameController : MonoBehaviour
     {
         levelManger.ShuffeBranches();
     }
-   
+
+    public void OpenHighLightTutorial(int id, BranchController branchController)
+    {
+        levelManger.OpenHighLightTut(id, branchController);
+    }
+
     public void ReplayGame()
     {
         LoadLevel(false);
+    }
+
+    public void CloseAllHighLightTutorial()
+    {
+        levelManger.CloseAllHightLighTut();
     }
 }

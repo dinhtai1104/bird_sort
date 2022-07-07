@@ -1,0 +1,596 @@
+fileFormatVersion: 2
+guid: 7a84e2f190cde864bb0368067a90427e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4294644142061668913
+    second: Vector
+  - first:
+      213: 8682023352491150700
+    second: Vector Smart
+  - first:
+      213: -715795809028604288
+    second: Vector Smart Obje
+  - first:
+      213: 625036454682262256
+    second: Vector Smart Object
+  - first:
+      213: 7661953245451436678
+    second: Vector Smart Object,
+  - first:
+      213: 874147551149990553
+    second: Vector Smart Object0
+  - first:
+      213: -4840378292690800408
+    second: Vector Smart Object1
+  - first:
+      213: -6216341421054492504
+    second: Vector Smart Object4
+  - first:
+      213: 2877692832949165407
+    second: Vector Smart Object7
+  - first:
+      213: 2586436875210664371
+    second: Vector Smart Object9
+  - first:
+      213: 4369323491182470630
+    second: Vector Smart Objecte
+  - first:
+      213: -7381292475730968666
+    second: Vector Smart Objectf
+  - first:
+      213: -125988655201980075
+    second: Vector Smart Objecti
+  - first:
+      213: -4690099872294675519
+    second: Vector Smart Objectj
+  - first:
+      213: 5648790645512328218
+    second: Vector Smart Objectk
+  - first:
+      213: 8128537049001352358
+    second: Vector Smart Objectl
+  - first:
+      213: 8945410850156124651
+    second: Vector Smart Objectp
+  - first:
+      213: -7046563918796515429
+    second: Vector Smart Objectq
+  - first:
+      213: -6323858749523924876
+    second: Vector Smart Objectu
+  - first:
+      213: 4777157465212564052
+    second: Vector Smart Objectz
+  - first:
+      213: 1692488777565492082
+    second: star_on copy 3
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Vector
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 189
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13a4c4cd714a99b30800000000000000
+      internalID: 4294644142061668913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 218
+        width: 22
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6d81e06d3ebc7870800000000000000
+      internalID: 8682023352491150700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Obje
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 137
+        width: 99
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08ef22f018bf016f0800000000000000
+      internalID: -715795809028604288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 215
+        width: 65
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fa710d08539ca800800000000000000
+      internalID: 625036454682262256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object,
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 137
+        width: 40
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 682c8c8c1e9b45a60800000000000000
+      internalID: 7661953245451436678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object0
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 225
+        width: 53
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 992a29bf098912c00800000000000000
+      internalID: 874147551149990553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object1
+      rect:
+        serializedVersion: 2
+        x: 518
+        y: 137
+        width: 35
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e037a5969583dcb0800000000000000
+      internalID: -4840378292690800408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object4
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 137
+        width: 29
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a00083c96e1bb9a0800000000000000
+      internalID: -6216341421054492504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object7
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 232
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5d5f98826e9fe720800000000000000
+      internalID: 2877692832949165407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Object9
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 207
+        width: 17
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b927ec62aed4e320800000000000000
+      internalID: 2586436875210664371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objecte
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 215
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e563b8c094f2ac30800000000000000
+      internalID: 4369323491182470630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectf
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 145
+        width: 111
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6afbac0e991609990800000000000000
+      internalID: -7381292475730968666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objecti
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 155
+        height: 141
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 551f4f05cf5604ef0800000000000000
+      internalID: -125988655201980075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectj
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 215
+        width: 15
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cb55cee30b69eeb0800000000000000
+      internalID: -4690099872294675519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectk
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 145
+        width: 41
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a14df4cd929846e40800000000000000
+      internalID: 5648790645512328218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectl
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 92
+        width: 64
+        height: 156
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6acd355116d5ec070800000000000000
+      internalID: 8128537049001352358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectp
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 218
+        width: 69
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be91b7df5cb742c70800000000000000
+      internalID: 8945410850156124651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectq
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 137
+        width: 96
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b979c0d3373953e90800000000000000
+      internalID: -7046563918796515429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectu
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 2
+        width: 70
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47861e8f8f32d38a0800000000000000
+      internalID: -6323858749523924876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Vector Smart Objectz
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 137
+        width: 116
+        height: 115
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 452b916776fdb4240800000000000000
+      internalID: 4777157465212564052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: star_on copy 3
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 2
+        width: 436
+        height: 133
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2735025739dec7710800000000000000
+      internalID: 1692488777565492082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

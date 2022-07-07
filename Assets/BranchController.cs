@@ -14,6 +14,8 @@ public class BranchController : MonoBehaviour
     public ParticleSystem birdTouchBranchEffect;
     public BranchBezierPath branchBezierPath;
 
+    public BranchTutorial branchTutorial;
+
     private void Start()
     {
         //listBirdsOnBranch = new List<BirdController>();
@@ -55,7 +57,7 @@ public class BranchController : MonoBehaviour
         //numberOfBirdsInBranch++;
     }
 
-    public void AddBird(BirdController bird, bool firstBird = false)
+    public void AddBird(BirdController bird, bool firstBird = false, bool fly = true)
     {
         IsReady = false;
         //if (bird == null) return;
@@ -63,6 +65,17 @@ public class BranchController : MonoBehaviour
 
         bird.transform.SetParent(null);
         Vector2 nextPos = GetNextSlotPos();
+        Vector2 worldSpace = transform.TransformPoint(nextPos);
+        if ((Vector2)bird.transform.position == worldSpace)
+        {
+            Debug.Log("/");
+            IsReady = true;
+            listBirdsOnBranch.Add(bird);
+            bird.transform.SetParent(transform);
+            numberOfBirdsInBranch = listBirdsOnBranch.Count;
+
+            return;
+        }
         if (nextPos == Vector2.zero)
         {
             return;
@@ -123,13 +136,20 @@ public class BranchController : MonoBehaviour
             {
                 b.AddAnimation(BirdAnimation.TOUCHING);
             }
+
+            // Check
+            int id = allHighLight[0].ID;
+            GameController.Instance.OpenHighLightTutorial(id, this);
         } else
         {
             foreach (BirdController b in listBirdsOnBranch)
             {
                 b.ClearTrack();
             }
+            GameController.Instance.CloseAllHighLightTutorial();
         }
+
+
     }
 
     public bool CheckFullBranchWithSameBird()
@@ -253,14 +273,14 @@ public class BranchController : MonoBehaviour
         //{
         if (isFull)
         {
-            for (int i = 0; i < current.Count; i++)
+            for (int i = current.Count - 1; i >= 0; i--)
             {
                 BirdController b = current[i];
                 Movement m = new Movement
                 (
                     b,
                     this,
-                    this,
+                    null,
                     b.slotInBranch,
                     isFull
                 );
@@ -268,7 +288,7 @@ public class BranchController : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < clearBirds.Count; i++)
+        for (int i = clearBirds.Count - 1; i >= 0; i--)
         {
             BirdController b = clearBirds[i];
             Movement m = new Movement
@@ -281,28 +301,8 @@ public class BranchController : MonoBehaviour
             );
             listMovement.Add(m);
         }
-        
-        //UndoSystem.Instance.SetLast(listMovement);
-        //} else
-        //{
-        //    List<Movement> listMovement = new List<Movement>();
-
-        //    for (int i = 0; i < clearBirds.Count; i++)
-        //    {
-        //        BirdController b = clearBirds[i];
-        //        Movement m = new Movement
-        //        (
-        //            b,
-        //            fromBranch,
-        //            this,
-        //            b.slotInBranch,
-        //            isFull
-        //        );
-        //        listMovement.Add(m);
-        //    }
 
         UndoSystem.Instance.PushBackMovement(listMovement);
-        //}
 
 
         for (int i = 0; i < getAllBirdFromOtherBranch.Count; i++)
@@ -316,6 +316,10 @@ public class BranchController : MonoBehaviour
 
     }
 
+    public int GetLastId()
+    {
+        return listBirdsOnBranch[listBirdsOnBranch.Count - 1].ID;
+    }
 
     public void ShuffBranch(BranchController toBranch)
     {
@@ -426,8 +430,13 @@ public class BranchController : MonoBehaviour
             }
         }
         listBirdsOnBranch.Clear();
-        listBirdsOnBranch = newListBird;
-        numberOfBirdsInBranch = listBirdsOnBranch.Count;
+        //listBirdsOnBranch = newListBird;
+        //numberOfBirdsInBranch = listBirdsOnBranch.Count;
+
+        for (int i = 0; i < newListBird.Count; i++)
+        {
+            AddBird(newListBird[i], true);
+        }
 
     }
 
