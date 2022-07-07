@@ -29,7 +29,7 @@ public class UiController : MonoBehaviour
     public Button homeBtn, replayBtn, addBranchBtn, shuffleBtn, undoBtn;
     public UiWin uiWin;
     public GameObject menuUi;
-    public GameObject gameplayUi;
+    public UiGameplay gameplayUi;
     public void UpdateUndoBtn(bool interac)
     {
         undoBtn.interactable = interac;
@@ -38,6 +38,7 @@ public class UiController : MonoBehaviour
     public void ShowWin()
     {
         StopAllCoroutines();
+        gameplayUi.Close();
         StartCoroutine(WaitAction(1f, () => uiWin.gameObject.SetActive(true)));
         //uiWin.gameObject.SetActive(true);
     }
@@ -45,10 +46,11 @@ public class UiController : MonoBehaviour
 
     public void PlayGameButtonOnClicked()
     {
-        gameplayUi.SetActive(true);
+        gameplayUi.gameObject.SetActive(true);
         menuUi.SetActive(false);
 
         GameController.Instance.LoadLevel();
+        gameplayUi.JoinGame();
     }
     IEnumerator WaitAction(float t, System.Action ac) 
     {
@@ -65,6 +67,8 @@ public class UiController : MonoBehaviour
         shuffleBtn.interactable = true;
 
         undoBtn.interactable = false;
+        gameplayUi.JoinGame();
+
     }
 
     public void ReplayButtonOnClicked()
@@ -76,9 +80,16 @@ public class UiController : MonoBehaviour
     public void HomeButtonOnClicked()
     {
         //homeBtn.interactable = false;
-        gameplayUi.SetActive(false);
-        menuUi.SetActive(true);
-        PoolingSystem.Instance.ResetPool();
+        //gameplayUi.SetActive(false);
+        //menuUi.SetActive(true);
+        //PoolingSystem.Instance.ResetPool();
+        gameplayUi.Close(()=>
+        {
+            PoolingSystem.Instance.ResetPool();
+            gameplayUi.gameObject.SetActive(false);
+            menuUi.SetActive(true);
+        });
+
     }
 
     public void AddNewBranchButtonOnClicked()

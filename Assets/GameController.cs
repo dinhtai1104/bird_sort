@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
                         {
                             Debug.Log("Set new branch");
                             currentTouchBranch = branch;
-                            currentTouchBranch.HighlightBird(true);
+                            branch.HighlightBird(true);
                         }
                     } else
                     {
@@ -54,17 +54,18 @@ public class GameController : MonoBehaviour
                             currentTouchBranch.HighlightBird(false);
                             Debug.Log("Touch Current branch");
                             currentTouchBranch = null;
-                            return;
                         }
-
-                        if (currentTouchBranch)
+                        else
                         {
-                            Debug.Log("Add Bird");
-                            // Day la luot touch thu hai
-                            branch.AddBirdFromOtherBranch(currentTouchBranch);
-                            currentTouchBranch.HighlightBird(false);
-                            branch.HighlightBird(false);
-                            currentTouchBranch = null;
+                            if (currentTouchBranch)
+                            {
+                                Debug.Log("Add Bird");
+                                // Day la luot touch thu hai
+                                branch.AddBirdFromOtherBranch(currentTouchBranch);
+                                currentTouchBranch.HighlightBird(false);
+                                branch.HighlightBird(false);
+                                currentTouchBranch = null;
+                            }
                         }
                     }
                 }
@@ -72,9 +73,10 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void LoadLevel()
+    public void LoadLevel(bool newGame = true)
     {
-        levelManger.LoadLevel(pLevel);
+        ClearUndoSystem();
+        levelManger.LoadLevelFC(pLevel, newGame);
     }
 
     public void AddMovement(Action action)
@@ -125,6 +127,6 @@ public class GameController : MonoBehaviour
    
     public void ReplayGame()
     {
-        LoadLevel();
+        LoadLevel(false);
     }
 }

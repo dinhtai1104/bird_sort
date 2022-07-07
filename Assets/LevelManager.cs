@@ -37,7 +37,7 @@ public class LevelManager : MonoBehaviour
         startSpawnBranchRight.position = new Vector2(width, startSpawnBranchRight.position.y);
     }
 
-    public void LoadLevel(int pLevel)
+    public void LoadLevel(int pLevel, bool newGame = false)
     {
         id = 0;
         DestroyBranches();
@@ -90,8 +90,61 @@ public class LevelManager : MonoBehaviour
         }
         upgradeIndex = 0;
         upGradePos = false;
+        if (newGame)
+            UiController.Instance.JoinGame();
+    }
 
-        UiController.Instance.JoinGame();
+    public void LoadLevelFC(int pLevel, bool newGame = false)
+    {
+        id = 0;
+        DestroyBranches();
+        listBranchInLevel = new List<BranchController>();
+        listBirds = new List<BirdController>();
+
+        LevelModelFC level = LevelLoader.GetLevelModelFC(pLevel);
+        List<PieceFC> pieces = level.standConfig;
+
+        lastPosLeft = startSpawnBranchLeft.position;
+        lastPosRight = startSpawnBranchRight.position;
+        for (int i = 0; i < pieces.Count; i++)
+        {
+            BranchController branch = AddNewBranch(false);
+            bool firstBird = true;
+
+            int[] idBirds = pieces[i].idBirds;
+            for (int x = 0; x < idBirds.Length; x++)
+            {
+
+                BirdController bird = PoolingSystem.Instance.GetBird();
+                bird.gameObject.SetActive(true);
+                bird.transform.position = branch.spawnPos.position;
+
+                branch.AddBirdToSlotInit(bird, x, firstBird);
+                bird.SetID(idBirds[x]);
+                if (id % 2 == 0)
+                {
+                    // Left
+                    bird.transform.localScale = new Vector3(-1, 1, 1);
+                }
+                else
+                {
+                    // Right
+                    bird.transform.localScale = new Vector3(1, 1, 1);
+                }
+
+                if (firstBird)
+                {
+                    firstBird = false;
+                }
+                listBirds.Add(bird);
+            }
+            id++;
+        }
+        upgradeIndex = 0;
+        upGradePos = false;
+        
+        if (newGame)
+            UiController.Instance.JoinGame();
     }
 
     public bool CheckWinGame()

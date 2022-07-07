@@ -29,6 +29,10 @@ public class BirdController : MonoBehaviour
     public void SetRelease(bool release)
     {
         this.isRelease = release;
+        if (release)
+        {
+            ClearTrack();
+        }
     }
     public void PlayBirdReleaseEffect(bool play = true)
     {

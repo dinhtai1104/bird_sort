@@ -201,14 +201,14 @@ public class BranchController : MonoBehaviour
 
         fromBranch.RemoveBird(getAllBirdFromOtherBranch);
 
-        HighlightBird(false);
-        fromBranch.HighlightBird(false);
+        
 
         for (int i = 0; i < getAllBirdFromOtherBranch.Count; i++)
         {
             AddBird(getAllBirdFromOtherBranch[i], this, i == 0);
         }
-
+        HighlightBird(false);
+        fromBranch.HighlightBird(false);
         if (CheckFullBranchWithSameBird()) return;
         List<BirdController> undoList = getAllBirdFromOtherBranch;
 

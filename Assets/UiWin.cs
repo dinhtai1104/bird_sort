@@ -29,7 +29,7 @@ public class UiWin : MonoBehaviour
     {
         GameController.Instance.pLevel++;
 
-        PlayerPrefs.GetInt("Level", GameController.Instance.pLevel);
+        PlayerPrefs.SetInt("Level", GameController.Instance.pLevel);
         //ChangeAnim(BirdAnimation.IDLE);
         nextLevelButton.interactable = true;
     }
