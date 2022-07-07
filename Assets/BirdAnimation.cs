@@ -23,7 +23,10 @@ public class BirdAnimation : MonoBehaviour
         skeletonBird.state.Event += OnEvent;
     }
 
-
+    public void SetLayer(int order)
+    {
+        GetComponent<MeshRenderer>().sortingOrder = order;
+    }
     public void SetSkin(string skin)
     {
         skeletonBird.state.Event -= OnEvent;
@@ -64,7 +67,7 @@ public class BirdAnimation : MonoBehaviour
     {
         if (e.Data.Name == "touching")
         {
-            Debug.Log("Event");
+            //Debug.Log("Event");
             callback?.Invoke();
         }
     }

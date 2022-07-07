@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
         pLevel = PlayerPrefs.GetInt("Level", 1);
     }
 
+
     private void Update()
     {
         //if (state == STATE.MOVING) return;
@@ -37,11 +38,16 @@ public class GameController : MonoBehaviour
             if (hitInfo.collider != null)
             {
                 BranchController branch = hitInfo.collider.GetComponent<BranchController>();
+                
                 if (branch != null)
                 {
+                    if (currentTouchBranch != null)
+                    {
+                        currentTouchBranch.HighlightBird(false);
+                    }
                     if (currentTouchBranch == null)
                     {
-                        if (!branch.IsEmpty() && !branch.CheckFullBranchWithSameBird())
+                        if (!branch.IsEmpty() && !branch.CheckFullBranchWithSameBird() && branch.IsReady)
                         {
                             Debug.Log("Set new branch");
                             currentTouchBranch = branch;
@@ -51,16 +57,26 @@ public class GameController : MonoBehaviour
                     {
                         if (branch == currentTouchBranch)
                         {
+                            branch.HighlightBird(false);
                             currentTouchBranch.HighlightBird(false);
                             Debug.Log("Touch Current branch");
                             currentTouchBranch = null;
                         }
                         else
                         {
+                            if (!branch.CanAddBirdFromOtherBranch(currentTouchBranch))
+                            {
+                                currentTouchBranch.HighlightBird(false);
+                                currentTouchBranch = branch;
+                                currentTouchBranch.HighlightBird(true);
+                                return;
+                            }
+
                             if (currentTouchBranch)
                             {
                                 Debug.Log("Add Bird");
                                 // Day la luot touch thu hai
+                                branch.HighlightBird(false);
                                 branch.AddBirdFromOtherBranch(currentTouchBranch);
                                 currentTouchBranch.HighlightBird(false);
                                 branch.HighlightBird(false);
@@ -91,29 +107,12 @@ public class GameController : MonoBehaviour
 
     public void Undo()
     {
-        if (currentTouchBranch)
-        {
-            currentTouchBranch.HighlightBird(false);
-            currentTouchBranch = null;
-        }
-        if (listMovement.Count > 0)
-        {
-            Action undo = listMovement.Pop();
-            undo?.Invoke();
-            if (listMovement.Count == 0)
-            {
-                UiController.Instance.UpdateUndoBtn(false);
-            }
-        }
+        UndoSystem.Instance.Undo();
     }
 
     public void ClearUndoSystem()
     {
-        listMovement.Clear();
-        if (listMovement.Count == 0)
-        {
-            UiController.Instance.UpdateUndoBtn(false);
-        }
+        UndoSystem.Instance.RefreshUndoSystem();
     }
 
     public void AddNewBranch()
@@ -123,6 +122,7 @@ public class GameController : MonoBehaviour
 
     public void ShuffleBird()
     {
+        levelManger.ShuffeBranches();
     }
    
     public void ReplayGame()

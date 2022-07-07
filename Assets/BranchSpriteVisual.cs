@@ -14,10 +14,14 @@ public class BranchSpriteVisual : MonoBehaviour
 
     public void SetSpriteBranch(Sprite branchSpr)
     {
+        if (!spriteRenderer)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
         this.spriteRenderer.sprite = branchSpr;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         SetSpriteBranch(branchSprites[Random.Range(0, branchSprites.Count)]);
     }

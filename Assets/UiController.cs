@@ -28,7 +28,7 @@ public class UiController : MonoBehaviour
 
     public Button homeBtn, replayBtn, addBranchBtn, shuffleBtn, undoBtn;
     public UiWin uiWin;
-    public GameObject menuUi;
+    public UiMenu menuUi;
     public UiGameplay gameplayUi;
     public void UpdateUndoBtn(bool interac)
     {
@@ -40,17 +40,19 @@ public class UiController : MonoBehaviour
         StopAllCoroutines();
         gameplayUi.Close();
         StartCoroutine(WaitAction(1f, () => uiWin.gameObject.SetActive(true)));
-        //uiWin.gameObject.SetActive(true);
     }
 
 
     public void PlayGameButtonOnClicked()
     {
-        gameplayUi.gameObject.SetActive(true);
-        menuUi.SetActive(false);
+        menuUi.JoinGame(() =>
+        {
+            gameplayUi.gameObject.SetActive(true);
+            menuUi.gameObject.SetActive(false);
 
-        GameController.Instance.LoadLevel();
-        gameplayUi.JoinGame();
+            GameController.Instance.LoadLevel();
+            gameplayUi.JoinGame();
+        });
     }
     IEnumerator WaitAction(float t, System.Action ac) 
     {
@@ -63,14 +65,34 @@ public class UiController : MonoBehaviour
     {
         homeBtn.interactable = true;
         replayBtn.interactable = true;
-        addBranchBtn.interactable = true;
-        shuffleBtn.interactable = true;
+        addBranchBtn.interactable = false;
+        shuffleBtn.interactable = false;
 
+        //undoBtn.interactable = false;
         undoBtn.interactable = false;
         gameplayUi.JoinGame();
 
     }
 
+    public void DisableButtonsJoinGame()
+    {
+        addBranchBtn.interactable = false;
+        shuffleBtn.interactable = false;
+        undoBtn.interactable = false;
+
+    }
+
+    public void EnableButtonJoinGame()
+    {
+        addBranchBtn.interactable = true;
+        shuffleBtn.interactable = true;
+
+        undoBtn.interactable = UndoSystem.Instance.CheckUndo();
+        if (GameController.Instance.levelManger.getTotalBranch() >= 12)
+        {
+            addBranchBtn.interactable = false;
+        }
+    }
     public void ReplayButtonOnClicked()
     {
         //replayBtn.interactable = false;
@@ -87,7 +109,7 @@ public class UiController : MonoBehaviour
         {
             PoolingSystem.Instance.ResetPool();
             gameplayUi.gameObject.SetActive(false);
-            menuUi.SetActive(true);
+            menuUi.gameObject.SetActive(true);
         });
 
     }

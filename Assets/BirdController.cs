@@ -6,13 +6,20 @@ using Spine.Unity;
 
 public class BirdController : MonoBehaviour
 {
+    private static int id = 1;
+    public int IDD = 1;
     public int ID = 1;
     public BirdAnimation birdAnimation;
     public ParticleSystem birdReleaseEffect;
+    public ParticleSystem featherEffect;
+    public BirdMovement birdMovementController;
     private bool isRelease = false;
 
+
+    public int slotInBranch = 0;
     private void Start()
     {
+        IDD = id++;
         //ID = UnityEngine.Random.Range(1, 4);
         //SetSkinBird(ID.ToString());
     }
@@ -21,19 +28,48 @@ public class BirdController : MonoBehaviour
     {
         isRelease = false;
     }
-
+    public void SetSlotInBranch(int branch)
+    {
+        this.slotInBranch = branch;
+    }
     public bool IsReleased()
     {
         return isRelease;
     }
+
+
+    public void PlayRandomFeather()
+    {
+        if (UnityEngine.Random.value < 0.4f)
+        {
+            featherEffect.Play();
+        }
+    }
+    public void SetOrder(int order)
+    {
+        birdAnimation.SetLayer(order);
+    }
+
     public void SetRelease(bool release)
     {
         this.isRelease = release;
         if (release)
         {
-            ClearTrack();
+            //ClearTrack();
         }
     }
+
+    
+    public void PushBranchStack(BranchController b, bool isRelease)
+    {
+        birdMovementController.PushBackBranch(b, isRelease);
+    }
+
+    public BranchController GetLastBranch()
+    {
+        return birdMovementController.ReleaseToLastBranch();
+    }
+
     public void PlayBirdReleaseEffect(bool play = true)
     {
         if (play)
@@ -60,6 +96,7 @@ public class BirdController : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(FlyIE(targetPos, branch, callback, first));
+        //PushBranchStack(branch);
     }
 
     public void AddAnimation(string anim)
@@ -69,7 +106,8 @@ public class BirdController : MonoBehaviour
 
     IEnumerator FlyIE(Vector2 targetPos, BranchController branch, System.Action callback = null, bool first = true)
     {
-        branch.HighlightBird(false);
+        UiController.Instance.DisableButtonsJoinGame();
+        birdAnimation.SetLayer(3);
         targetPos = branch.transform.TransformPoint(targetPos);
         List<Vector2> path = new List<Vector2>();
         if (!first)
@@ -81,8 +119,10 @@ public class BirdController : MonoBehaviour
             path.Add(transform.position);
             path.Add(targetPos);
         }
-        Debug.Log(path.Count);
+        //Debug.Log(path.Count);
         yield return new WaitForSeconds(0.1f);
+        PlayRandomFeather();
+
         SetAnim(BirdAnimation.FLY,null, true);
         Vector3 targetScale = Vector3.one;
         if (targetPos.x > 0)
@@ -92,6 +132,7 @@ public class BirdController : MonoBehaviour
         {
             targetScale = new Vector3(-1, 1, 1);
         }
+        transform.SetParent(null);
 
         if (targetPos.x - transform.position.x > 0)
         {
@@ -115,6 +156,8 @@ public class BirdController : MonoBehaviour
         }
         transform.SetParent(branch.transform);
         transform.localScale = new Vector2(Mathf.Sign(branch.transform.position.x) * Mathf.Sign(branch.transform.localScale.x), 1);
+        birdAnimation.SetLayer(2);
+        UiController.Instance.EnableButtonJoinGame();
 
         SetAnim(BirdAnimation.GROUNDING, callback);
     }
@@ -141,6 +184,8 @@ public class BirdController : MonoBehaviour
 
     public void FlyToOtherPos(Vector2 targetPos)
     {
+        //StopCoroutine("FlyToPos");
+        StopAllCoroutines();
         StartCoroutine(FlyToPos(targetPos));
     }
 
@@ -151,9 +196,13 @@ public class BirdController : MonoBehaviour
 
     private IEnumerator FlyToPos(Vector2 targetPos)
     {
+        birdAnimation.SetLayer(3);
+
         yield return new WaitForSeconds(0.1f);
         SetAnim(BirdAnimation.FLY, null, true);
         transform.SetParent(null);
+        PlayRandomFeather();
+
         float speed = UnityEngine.Random.Range(10, 25);
         while (true)
         {
@@ -165,5 +214,8 @@ public class BirdController : MonoBehaviour
             }
             yield return null;
         }
+        birdAnimation.SetLayer(2);
+        //UiController.Instance.EnableButtonJoinGame();
+
     }
 }

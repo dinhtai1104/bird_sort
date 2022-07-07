@@ -24,10 +24,17 @@ public class BranchController : MonoBehaviour
     }
 
 
+    public int GetCountBird()
+    {
+        return listBirdsOnBranch.Count;
+    }
+
     private void OnEnable()
     {
+        IsReady = false;
         listBirdsOnBranch = new List<BirdController>();
         numberOfBirdsInBranch = 0;
+        name = "Branch " + UnityEngine.Random.Range(0, 10000);
     }
 
     public void PlayBirdTouchBranchEffect(bool play = true)
@@ -41,31 +48,21 @@ public class BranchController : MonoBehaviour
         }
     }
 
-    public void AddBirdOnStart()
+    public void AddBirdOnStart(BirdController bird)
     {
-        //Vector2 nextPos = GetNextSlotPos();
-        //BirdController bird = Instantiate(birdPrefab, spawnPos.position, Quaternion.identity);
-        ////bird.transform.localPosition = nextPos;
-        //bird.transform.localScale = new Vector2(Mathf.Sign(transform.position.x), 1);
-        //System.Action callback = () =>
-        //{
-        //    animator.SetTrigger("touch");
-        //};
-        //bird.FlyToPosition(nextPos, this, callback);
-
-        //listBirdsOnBranch.Add(bird);
+        listBirdsOnBranch.Add(bird);
+        numberOfBirdsInBranch = listBirdsOnBranch.Count;
         //numberOfBirdsInBranch++;
     }
 
-    public void AddBird(BirdController bird, BranchController nextBranch, bool firstBird = false)
+    public void AddBird(BirdController bird, bool firstBird = false)
     {
+        IsReady = false;
         //if (bird == null) return;
         GameController.Instance.state = STATE.MOVING;
 
         bird.transform.SetParent(null);
         Vector2 nextPos = GetNextSlotPos();
-        HighlightBird(false);
-        nextBranch.HighlightBird(false);
         if (nextPos == Vector2.zero)
         {
             return;
@@ -75,6 +72,7 @@ public class BranchController : MonoBehaviour
 
         System.Action callback = () =>
         {
+            IsReady = true;
             if (checkWin)
             {
                 ReleaseBirds();
@@ -90,10 +88,10 @@ public class BranchController : MonoBehaviour
             animator.SetTrigger("touch");
         };
 
-        bird.FlyToPosition(nextPos, nextBranch, callback);
-        numberOfBirdsInBranch++;
-        HighlightBird(false);
-        nextBranch.HighlightBird(false);
+        bird.FlyToPosition(nextPos, this, callback);
+        //numberOfBirdsInBranch/*++;*/
+        numberOfBirdsInBranch = listBirdsOnBranch.Count;
+
     }
 
 
@@ -108,8 +106,9 @@ public class BranchController : MonoBehaviour
             b.FlyToOtherPos(target);
             b.PlayBirdReleaseEffect();
         }
-        numberOfBirdsInBranch = 0;
         listBirdsOnBranch.Clear();
+        numberOfBirdsInBranch = listBirdsOnBranch.Count;
+
     }
 
     public void HighlightBird(bool active)
@@ -117,14 +116,16 @@ public class BranchController : MonoBehaviour
         numberOfBirdsInBranch = listBirdsOnBranch.Count;
 
         if (numberOfBirdsInBranch <= 0) return;
-        List<BirdController> allHighLight = GetBirdsCanFly();
-        foreach (BirdController b in allHighLight)
+        if (active)
         {
-            if (active)
+            List<BirdController> allHighLight = GetBirdsCanFly();
+            foreach (BirdController b in allHighLight)
             {
                 b.AddAnimation(BirdAnimation.TOUCHING);
             }
-            else
+        } else
+        {
+            foreach (BirdController b in listBirdsOnBranch)
             {
                 b.ClearTrack();
             }
@@ -153,32 +154,62 @@ public class BranchController : MonoBehaviour
 
         return listBirdsOnBranch.Count == 0 || numberOfBirdsInBranch <= 0;
     }
-
+    public bool IsReady = false;
     public void AddBirdToSlotInit(BirdController bird, int slot, bool firstBird = false)
     {
-        if (listBirdsOnBranch == null)
-        {
-            listBirdsOnBranch = new List<BirdController>();
-        }
+        SoundManager.Instance.PlayReleaseSound();
+
+        bird.transform.position = spawnPos.position;
         System.Action callback = () =>
         {
-            animator.SetTrigger("touch");
+            IsReady = true;
         };
         bird.FlyToPosition(listSlotPosBirds[slot].localPosition, this, callback, false);
-        listBirdsOnBranch.Add(bird);
-        numberOfBirdsInBranch++;
+        //bird.SetOrder(slot + 3);
+    }
+
+    public bool CanAddBirdFromOtherBranch(BranchController fromBranch)
+    {
+        fromBranch.HighlightBird(false);
+        numberOfBirdsInBranch = listBirdsOnBranch.Count;
+        if (numberOfBirdsInBranch == 4) return false;
+        List<BirdController> getAllBirdFromOtherBranch = fromBranch.GetBirdsCanFly();
+        if (getAllBirdFromOtherBranch.Count > 0)
+        {
+            if (numberOfBirdsInBranch > 0 && (getAllBirdFromOtherBranch[0].ID == this.listBirdsOnBranch[numberOfBirdsInBranch - 1].ID))
+            {
+                return true;
+            } else
+            {
+                if (numberOfBirdsInBranch == 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void SetPosAllBird()
+    {
+        if (listBirdsOnBranch.Count == 0 || listBirdsOnBranch == null) return;
+        for (int i = 0; i < listBirdsOnBranch.Count; i++)
+        {
+            BirdController b = listBirdsOnBranch[i];
+            AddBirdToSlotInit(b, i, i == 1);
+        }
     }
 
     public void AddBirdFromOtherBranch(BranchController fromBranch)
     {
         numberOfBirdsInBranch = listBirdsOnBranch.Count;
-        HighlightBird(false);
-        fromBranch.HighlightBird(false);
+
         List<BirdController> getAllBirdFromOtherBranch = fromBranch.GetBirdsCanFly();
 
         if (getAllBirdFromOtherBranch == null) return;
         if (getAllBirdFromOtherBranch.Count > 0)
         {
+            // Nếu hiện tại đã có chim và con chim ở ngoài cùng không có ID trùng với chim mới thì không cho phép bay
             if (numberOfBirdsInBranch > 0 && (getAllBirdFromOtherBranch[0].ID != this.listBirdsOnBranch[numberOfBirdsInBranch - 1].ID))
             {
                 return;
@@ -197,50 +228,202 @@ public class BranchController : MonoBehaviour
 
             getAllBirdFromOtherBranch = newPos;
         }
+        // Bỏ highlight ở cành cũ
+        fromBranch.HighlightBird(false);
 
-
+        // Xóa chim ở cành cũ
         fromBranch.RemoveBird(getAllBirdFromOtherBranch);
 
+        bool isFull = true;
+        for (int i = 0; i < listBirdsOnBranch.Count; i++)
+        {
+            if (listBirdsOnBranch[i].ID != getAllBirdFromOtherBranch[0].ID)
+            {
+                isFull = false;
+                break;
+            }
+        }
+        isFull = isFull && (getAllBirdFromOtherBranch.Count + numberOfBirdsInBranch) == 4;
+
+        List<BirdController> clearBirds = new List<BirdController>(getAllBirdFromOtherBranch);
+        List<BirdController> current = new List<BirdController>(listBirdsOnBranch);
+        List<Movement> listMovement = new List<Movement>();
+
+        //if (isFull)
+        //{
+        if (isFull)
+        {
+            for (int i = 0; i < current.Count; i++)
+            {
+                BirdController b = current[i];
+                Movement m = new Movement
+                (
+                    b,
+                    this,
+                    this,
+                    b.slotInBranch,
+                    isFull
+                );
+                listMovement.Add(m);
+            }
+        }
+
+        for (int i = 0; i < clearBirds.Count; i++)
+        {
+            BirdController b = clearBirds[i];
+            Movement m = new Movement
+            (
+                b,
+                fromBranch,
+                this,
+                b.slotInBranch,
+                isFull
+            );
+            listMovement.Add(m);
+        }
         
+        //UndoSystem.Instance.SetLast(listMovement);
+        //} else
+        //{
+        //    List<Movement> listMovement = new List<Movement>();
+
+        //    for (int i = 0; i < clearBirds.Count; i++)
+        //    {
+        //        BirdController b = clearBirds[i];
+        //        Movement m = new Movement
+        //        (
+        //            b,
+        //            fromBranch,
+        //            this,
+        //            b.slotInBranch,
+        //            isFull
+        //        );
+        //        listMovement.Add(m);
+        //    }
+
+        UndoSystem.Instance.PushBackMovement(listMovement);
+        //}
+
 
         for (int i = 0; i < getAllBirdFromOtherBranch.Count; i++)
         {
-            AddBird(getAllBirdFromOtherBranch[i], this, i == 0);
+            // Di chuyển chim từ cành cũ sang cành hiện tại (this)
+            AddBird(getAllBirdFromOtherBranch[i], true);
         }
-        HighlightBird(false);
-        fromBranch.HighlightBird(false);
-        if (CheckFullBranchWithSameBird()) return;
-        List<BirdController> undoList = getAllBirdFromOtherBranch;
+        //   HighlightBird(false);
 
-        Action undoMovement = ()=> 
-        {
-            //if (CheckFullBranchWithSameBird()) return;
-            RemoveBird(undoList);
-        };
-        bool first = true;
+        // Setup Undo Sytem
 
-        for (int i = undoList.Count - 1; i >= 0; --i)
+    }
+
+
+    public void ShuffBranch(BranchController toBranch)
+    {
+        List<BirdController> listCurrent = new List<BirdController>( listBirdsOnBranch );
+        List<BirdController> listOther = new List<BirdController>(toBranch.listBirdsOnBranch);
+        toBranch.RemoveBird(listOther);
+        RemoveBird(listCurrent);
+
+        for (int i = 0; i < listCurrent.Count; i++)
         {
-            BirdController bird = undoList[i];
-            undoMovement += () =>
-            {
-                if (bird.IsReleased()) return;
-                Debug.Log("Undo list: " + undoList.Count);
-                fromBranch.AddBird(bird, fromBranch, first);
-            };
-            first = false;
+            // Di chuyển chim từ cành cũ sang cành hiện tại (this)
+            toBranch.AddBird(listCurrent[i], true);
         }
 
-        GameController.Instance.AddMovement(undoMovement);
+        for (int i = 0; i < listOther.Count; i++)
+        {
+            // Di chuyển chim từ cành cũ sang cành hiện tại (this)
+            AddBird(listOther[i], true);
+        }
+        
+    }
+
+    private void UndoTemp()
+    {
+        //bool isRelease = CheckFullBranchWithSameBird();
+        //for (int i = 0; i < getAllBirdFromOtherBranch.Count; i++)
+        //{
+        //    getAllBirdFromOtherBranch[i].PushBranchStack(this, isRelease);
+        //    //getAllBirdFromOtherBranch[i].PushBranchStack(fromBranch);
+        //    AddBird(getAllBirdFromOtherBranch[i], this, true);
+        //}
+
+        // UNDO SYSTEM NOT COMPLETED!
+        ///----------------------------------------------------------
+        //if (CheckFullBranchWithSameBird()) return;
+        //List<BirdController> undoList = new List<BirdController>(getAllBirdFromOtherBranch);
+        //bool isRelease = CheckFullBranchWithSameBird();
+        //if (isRelease)
+        //{
+        //    undoList = new List<BirdController>(listBirdsOnBranch);
+        //}
+        //Movement movement = new Movement
+        //{
+        //    fromBranch = fromBranch,
+        //    destBranch = this,
+        //    IsReleased = isRelease,
+        //    action = ()=>
+        //    {
+        //        for (int i = 0; i < undoList.Count; i++)
+        //        {
+        //            BirdController bird = undoList[i];
+        //            AddBird(bird, fromBranch, true);
+        //        }
+        //        RemoveBird(undoList);
+        //    }
+        //};
+
+        //UndoSystem.Instance.PushBackMovement(movement);
+
+
+        //Action undoMovement = ()=> 
+        //{
+        //    //RemoveBird(undoList);
+        //};
+        //bool first = true;
+        //for (int i = 0; i < undoList.Count; i++)
+        //{
+        //    BirdController bird = undoList[i];
+        //    BranchController from = bird.GetLastBranch();
+
+        //    undoMovement += () =>
+        //    {
+        //        if (check)
+        //        {
+        //            from = bird.GetLastBranch();
+        //        }
+        //        //if (bird.IsReleased()) return;
+        //        AddBird(bird, from, first);
+        //    };
+        //    first = false;
+        //}
+        //undoMovement += () =>
+        //{
+        //    RemoveBird(undoList);
+        //};
+
+        //GameController.Instance.AddMovement(undoMovement);
 
     }
 
     public void RemoveBird(List<BirdController> listBirdFly)
     {
         List<BirdController> newListBird = new List<BirdController>();
-        for (int i = 0; i < listBirdsOnBranch.Count - listBirdFly.Count; i++)
+        for (int i = 0; i < listBirdsOnBranch.Count; i++)
         {
-            newListBird.Add(listBirdsOnBranch[i]);
+            bool found = false;
+            for (int j = 0; j < listBirdFly.Count; j++)
+            {
+                if (listBirdFly[j].IDD == listBirdsOnBranch[i].IDD)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                newListBird.Add(listBirdsOnBranch[i]);
+            }
         }
         listBirdsOnBranch.Clear();
         listBirdsOnBranch = newListBird;

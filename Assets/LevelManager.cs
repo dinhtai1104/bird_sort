@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
+using Random = UnityEngine.Random;
 public class LevelManager : MonoBehaviour
 {
     public BranchController branchPrefab;
@@ -13,7 +14,7 @@ public class LevelManager : MonoBehaviour
 
     private List<BirdController> listBirds = new List<BirdController>();
     private int id = 0;
-
+    private bool isLeft = true;
 
     private void Start()
     {
@@ -33,10 +34,11 @@ public class LevelManager : MonoBehaviour
 
         float orthorSize = Camera.main.orthographicSize;
         float width = Camera.main.aspect * Camera.main.orthographicSize;
-        startSpawnBranchLeft.position = new Vector2(-width, startSpawnBranchLeft.position.y);
-        startSpawnBranchRight.position = new Vector2(width, startSpawnBranchRight.position.y);
+        startSpawnBranchLeft.position = new Vector2(-width - 0.3f, startSpawnBranchLeft.position.y);
+        startSpawnBranchRight.position = new Vector2(width + 0.3f, startSpawnBranchRight.position.y);
     }
 
+    public int getTotalBranch() => listBranchInLevel.Count;
     public void LoadLevel(int pLevel, bool newGame = false)
     {
         id = 0;
@@ -65,9 +67,11 @@ public class LevelManager : MonoBehaviour
                     BirdController bird = PoolingSystem.Instance.GetBird();
                     bird.gameObject.SetActive(true);
                     bird.transform.position = branch.spawnPos.position;
+                    bird.PushBranchStack(branch, false);
 
-                    branch.AddBirdToSlotInit(bird, p.possition - 1, firstBird);
+                    branch.AddBirdOnStart(bird);
                     bird.SetID(p.type);
+                    bird.transform.SetParent(branch.transform);
                     if (id % 2 == 0)
                     {
                         // Left
@@ -90,12 +94,24 @@ public class LevelManager : MonoBehaviour
         }
         upgradeIndex = 0;
         upGradePos = false;
+
+        StopAllCoroutines();
+        StartCoroutine(WaitForAction(0.3f, () =>
+        {
+            foreach (BranchController b in listBranchInLevel)
+            {
+                b.SetPosAllBird();
+            }
+        }));
+
         if (newGame)
             UiController.Instance.JoinGame();
+        UiController.Instance.DisableButtonsJoinGame();
     }
 
     public void LoadLevelFC(int pLevel, bool newGame = false)
     {
+        isLeft = true;
         id = 0;
         DestroyBranches();
         listBranchInLevel = new List<BranchController>();
@@ -104,24 +120,38 @@ public class LevelManager : MonoBehaviour
         LevelModelFC level = LevelLoader.GetLevelModelFC(pLevel);
         List<PieceFC> pieces = level.standConfig;
 
+        int totalBranches = pieces.Count;
         lastPosLeft = startSpawnBranchLeft.position;
         lastPosRight = startSpawnBranchRight.position;
+        float offset = lastPosLeft.y - lastPosRight.y;
+        lastPosLeft.y = 0;
+        lastPosRight.y = offset;
+
+        lastPosLeft = lastPosLeft + Vector2.up * 1.5f * totalBranches / 4f;
+        lastPosRight = lastPosRight + Vector2.up * 1.5f * totalBranches / 4f;
+
+
         for (int i = 0; i < pieces.Count; i++)
         {
             BranchController branch = AddNewBranch(false);
+
+
             bool firstBird = true;
+            branch.IsReady = true;
 
             int[] idBirds = pieces[i].idBirds;
             for (int x = 0; x < idBirds.Length; x++)
             {
-
+                branch.IsReady = false;
                 BirdController bird = PoolingSystem.Instance.GetBird();
                 bird.gameObject.SetActive(true);
                 bird.transform.position = branch.spawnPos.position;
-
-                branch.AddBirdToSlotInit(bird, x, firstBird);
+                branch.AddBirdOnStart(bird);
+                //branch.AddBirdToSlotInit(bird, x, firstBird);
                 bird.SetID(idBirds[x]);
-                if (id % 2 == 0)
+                bird.transform.SetParent(branch.transform);
+                bird.PushBranchStack(branch, false);
+                if (isLeft)
                 {
                     // Left
                     bird.transform.localScale = new Vector3(-1, 1, 1);
@@ -138,15 +168,32 @@ public class LevelManager : MonoBehaviour
                 }
                 listBirds.Add(bird);
             }
+            //isLeft = !isLeft;
             id++;
         }
         upgradeIndex = 0;
         upGradePos = false;
-        
+
+        StopAllCoroutines();
+
+        StartCoroutine(WaitForAction(0.3f, () =>
+        {
+            foreach (BranchController b in listBranchInLevel)
+            {
+                b.SetPosAllBird();
+            }
+        }));
         if (newGame)
             UiController.Instance.JoinGame();
+        UiController.Instance.DisableButtonsJoinGame();
     }
 
+
+    IEnumerator WaitForAction(float time, System.Action ac)
+    {
+        yield return new WaitForSeconds(time);
+        ac?.Invoke();
+    }
     public bool CheckWinGame()
     {
         foreach (BirdController bird in listBirds)
@@ -168,15 +215,26 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            if (branches > 5)
+            if (branches > 8)
             {
+                if (!upGradePos)
+                {
+                    upgradeIndex = id;
+                    upgradeIndex %= 3;
+                }
                 upGradePos = true;
-                if (upgradeIndex == 2)
+                if ((branches) % 3 == 0 && !isLeft)
                 {
                     // Move branch
                     foreach (BranchController br in listBranchInLevel)
                     {
-                        br.transform.position += Vector3.up * 2;
+                        if (autoIncrease)
+                        {
+                            br.transform.DOMoveY(br.transform.position.y + 2, 0.2f);
+                        } else
+                        {
+                            br.transform.position += Vector3.up * 2;
+                        }
                     }
                     upgradeIndex = 0;
                     lastPosRight += Vector2.up * 2;
@@ -194,10 +252,13 @@ public class LevelManager : MonoBehaviour
         branch.gameObject.SetActive(true);
         branch.transform.SetParent(null);
 
-        if (id % 2 == 0)
+        if (isLeft)
         {
             branch.transform.localScale = new Vector3(1, 1, 1);
             branch.transform.position = lastPosLeft;
+            branch.transform.position += Vector3.left * 3;
+            branch.transform.DOMove(lastPosLeft, 0.2f);
+
             lastPosLeft += Vector2.down * 2;
 
         }
@@ -205,14 +266,51 @@ public class LevelManager : MonoBehaviour
         {
             branch.transform.localScale = new Vector3(-1, 1, 1);
             branch.transform.position = lastPosRight;
+            branch.transform.position += Vector3.right * 3;
+            branch.transform.DOMove(lastPosRight, 0.2f);
             lastPosRight += Vector2.down * 2;
         }
+
+        isLeft = !isLeft;
+
         if (autoIncrease)
             id++;
+
+        if (listBranchInLevel.Count >= 12)
+        {
+            UiController.Instance.addBranchBtn.interactable = false;
+        }
         return branch;
     }
 
-    
+
+    public void ShuffeBranches()
+    {
+        BranchController aBranch = listBranchInLevel[Random.Range(0, listBranchInLevel.Count)];
+        BranchController bBranch = listBranchInLevel[Random.Range(0, listBranchInLevel.Count)];
+        int index = 0;
+        while (index < 100)
+        {
+            if (bBranch.GetCountBird() > 0 && bBranch != aBranch)
+            {
+                Debug.Log(aBranch.name + "-" + bBranch.name);
+                bBranch.ShuffBranch(aBranch);
+                return;
+            }
+            index++;
+            bBranch = listBranchInLevel[Random.Range(0, listBranchInLevel.Count)];
+        }
+        for (int i = 0; i < listBranchInLevel.Count; i++)
+        {
+            if (listBranchInLevel[i] != aBranch)
+            {
+                Debug.Log(aBranch.name + "-" + listBranchInLevel[i].name);
+
+                aBranch.ShuffBranch(listBranchInLevel[i]);
+                return;
+            }
+        }
+    }
 
     private void DestroyBranches()
     {
