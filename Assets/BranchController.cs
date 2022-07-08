@@ -183,6 +183,7 @@ public class BranchController : MonoBehaviour
         System.Action callback = () =>
         {
             IsReady = true;
+            animator.SetTrigger("touch");
         };
         bird.FlyToPosition(listSlotPosBirds[slot].localPosition, this, callback, false);
         //bird.SetOrder(slot + 3);
@@ -265,6 +266,12 @@ public class BranchController : MonoBehaviour
         }
         isFull = isFull && (getAllBirdFromOtherBranch.Count + numberOfBirdsInBranch) == 4;
 
+        if (isFull)
+        {
+            PlayerPrefs.SetInt("Tut_lv1", 1);
+            HandTutorialController.Instance.EndTutorial();
+        }
+
         List<BirdController> clearBirds = new List<BirdController>(getAllBirdFromOtherBranch);
         List<BirdController> current = new List<BirdController>(listBirdsOnBranch);
         List<Movement> listMovement = new List<Movement>();
@@ -321,6 +328,7 @@ public class BranchController : MonoBehaviour
         return listBirdsOnBranch[listBirdsOnBranch.Count - 1].ID;
     }
 
+
     public void ShuffBranch(BranchController toBranch)
     {
         List<BirdController> listCurrent = new List<BirdController>( listBirdsOnBranch );
@@ -330,16 +338,17 @@ public class BranchController : MonoBehaviour
 
         for (int i = 0; i < listCurrent.Count; i++)
         {
+            
             // Di chuyển chim từ cành cũ sang cành hiện tại (this)
             toBranch.AddBird(listCurrent[i], true);
         }
 
         for (int i = 0; i < listOther.Count; i++)
         {
+            
             // Di chuyển chim từ cành cũ sang cành hiện tại (this)
             AddBird(listOther[i], true);
         }
-        
     }
 
     private void UndoTemp()

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public enum STATE
 {
@@ -17,7 +18,6 @@ public class GameController : MonoBehaviour
     public LevelManager levelManger;
     public STATE state = STATE.NONE;
     public Stack<Action> listMovement = new Stack<Action>();
-    public int pLevel;
 
     private void Awake()
     {
@@ -26,7 +26,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        pLevel = PlayerPrefs.GetInt("Level", 1);
     }
 
 
@@ -35,30 +34,55 @@ public class GameController : MonoBehaviour
         //if (state == STATE.MOVING) return;
         if (Input.GetMouseButtonDown(0))
         {
+            if (IsTouchUI()) return;
             Vector2 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hitInfo = Physics2D.Raycast(mPos, Vector3.zero, Mathf.Infinity, branchLayerMask);
             if (hitInfo.collider != null)
             {
                 BranchController branch = hitInfo.collider.GetComponent<BranchController>();
-                
+
+                if (GameInfo.Level == 1 && !PlayerPrefs.HasKey("Tut_lv1"))
+                {
+                    if (branchTut)
+                    {
+                        HandTutorialController.Instance.OpenTutorial();
+
+                        if (branch == branchTut)
+                        {
+                            branchTut = levelManger.GetBranch(1);
+                        }
+                        else
+                        {
+                            branchTut = levelManger.GetBranch(0);
+                        }
+                    }
+                    HandTutorialController.Instance.ChangePosition(branchTut.listSlotPosBirds[2].transform.position);
+                }
                 if (branch != null)
                 {
+
                     if (currentTouchBranch != null)
                     {
                         currentTouchBranch.HighlightBird(false);
                     }
                     if (currentTouchBranch == null)
                     {
+
                         if (!branch.IsEmpty() && !branch.CheckFullBranchWithSameBird() && branch.IsReady)
                         {
+                            SoundManager.Instance.PlayTweetSound();
+
                             Debug.Log("Set new branch");
                             currentTouchBranch = branch;
                             branch.HighlightBird(true);
                         }
                     } else
                     {
+
                         if (branch == currentTouchBranch)
                         {
+                            HandTutorialController.Instance.EndTutorial();
+
                             branch.HighlightBird(false);
                             currentTouchBranch.HighlightBird(false);
                             Debug.Log("Touch Current branch");
@@ -66,8 +90,11 @@ public class GameController : MonoBehaviour
                         }
                         else
                         {
+
                             if (!branch.CanAddBirdFromOtherBranch(currentTouchBranch))
                             {
+                                SoundManager.Instance.PlayTweetSound();
+
                                 currentTouchBranch.HighlightBird(false);
                                 currentTouchBranch = branch;
                                 currentTouchBranch.HighlightBird(true);
@@ -86,17 +113,54 @@ public class GameController : MonoBehaviour
                             }
                         }
                     }
+                } else
+                {
                 }
             }
         }
     }
 
+
+    private BranchController branchTut;
     public void LoadLevel(bool newGame = true)
     {
+        UiController.Instance.SetTextLevel(GameInfo.Level);
+        HandTutorialController.Instance.EndTutorial();
         ClearUndoSystem();
-        levelManger.LoadLevelFC(pLevel, newGame);
-    }
+        levelManger.LoadLevelFC(GameInfo.Level, newGame);
+        currentTouchBranch = null;
+        
 
+        if (GameInfo.Level == 2 && !PlayerPrefs.HasKey("Tut_addBranch"))
+        {
+            UiGameplay.Instance.StartTutorial("Hello click this to add new branch",
+                ()=>
+                {
+                    PlayerPrefs.SetInt("Tut_addBranch", 1);
+                });
+            UiGameplay.Instance.OnTutorial_EnableButton(UiGameplay.Instance.canvasButtonAddBranch);
+        }
+        branchTut = null;
+        StartCoroutine(WaitForAction(0.6f, () =>
+        {
+            if (GameInfo.Level == 1 && !PlayerPrefs.HasKey("Tut_lv1"))
+            {
+                HandTutorialController.Instance.OpenTutorial();
+                branchTut = levelManger.GetPosTut();
+                HandTutorialController.Instance.ChangePosition(branchTut.listSlotPosBirds[2].transform.position);
+            }
+        }));
+        //if (pLevel == 3)
+        //{
+        //    UiGameplay.Instance.StartTutorial("Hello click this to undo last step");
+        //    UiGameplay.Instance.OnTutorial_EnableButton(UiGameplay.Instance.canvasButtonUndo);
+        //}
+    }
+    IEnumerator WaitForAction(float time, System.Action ac)
+    {
+        yield return new WaitForSeconds(time);
+        ac?.Invoke();
+    }
     public void AddMovement(Action action)
     {
         if (listMovement == null)
@@ -119,6 +183,9 @@ public class GameController : MonoBehaviour
 
     public void AddNewBranch()
     {
+        if (levelManger.getTotalBranch() >= 12) return;
+        GameInfo.Branch--;
+        UiController.Instance.UpdateBoosterBranch(GameInfo.Branch);
         levelManger.AddNewBranch();
     }
 
@@ -141,4 +208,36 @@ public class GameController : MonoBehaviour
     {
         levelManger.CloseAllHightLighTut();
     }
+
+    private bool IsTouchUI()
+    {
+        return IsPointerOverUIElement();
+    }
+
+    public static bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+    ///Returns 'true' if we touched or hovering on Unity UI element.
+    public static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
+                return true;
+
+        }
+        return false;
+    }
+    ///Gets all event systen raycast results of current mouse or touch position.
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
+    }
+
 }

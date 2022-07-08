@@ -38,6 +38,11 @@ public class LevelManager : MonoBehaviour
         startSpawnBranchRight.position = new Vector2(width + 0.5f, startSpawnBranchRight.position.y);
     }
 
+    public BranchController GetBranch(int v)
+    {
+        return listBranchInLevel[v];
+    }
+
     public int getTotalBranch() => listBranchInLevel.Count;
     public void LoadLevel(int pLevel, bool newGame = false)
     {
@@ -109,6 +114,11 @@ public class LevelManager : MonoBehaviour
         UiController.Instance.DisableButtonsJoinGame();
     }
 
+    public BranchController GetPosTut()
+    {
+        return listBranchInLevel[0];
+    }
+
     public void LoadLevelFC(int pLevel, bool newGame = false)
     {
         isLeft = true;
@@ -178,11 +188,14 @@ public class LevelManager : MonoBehaviour
 
         StartCoroutine(WaitForAction(0.3f, () =>
         {
+
             foreach (BranchController b in listBranchInLevel)
             {
                 b.SetPosAllBird();
             }
         }));
+
+        
         if (newGame)
             UiController.Instance.JoinGame();
         UiController.Instance.DisableButtonsJoinGame();
@@ -202,18 +215,28 @@ public class LevelManager : MonoBehaviour
         {
             if (branchController != listBranchInLevel[i])
             {
-                if (listBranchInLevel[i].GetCountBird() == 0)
+                if (GameInfo.Level == 2)
                 {
-                    listBranchInLevel[i].branchTutorial.ActiveV();
-                    continue;
+
+                    if (listBranchInLevel[i].GetCountBird() == 0)
+                    {
+                        listBranchInLevel[i].branchTutorial.ActiveV();
+                        continue;
+                    }
+                    if (listBranchInLevel[i].GetLastId() == id)
+                    {
+                        listBranchInLevel[i].branchTutorial.ActiveV();
+                    }
+                    else
+                    {
+                        listBranchInLevel[i].branchTutorial.ActiveX();
+                    }
                 }
-                if (listBranchInLevel[i].GetLastId() == id)
+                else
                 {
-                    listBranchInLevel[i].branchTutorial.ActiveV();
-                } else
-                {
-                    listBranchInLevel[i].branchTutorial.ActiveX();
+                    listBranchInLevel[i].branchTutorial.DisableAll();
                 }
+
             }
         }
     }
@@ -315,6 +338,7 @@ public class LevelManager : MonoBehaviour
 
     public void ShuffeBranches()
     {
+        GameInfo.Shuff--;
         BranchController aBranch = listBranchInLevel[Random.Range(0, listBranchInLevel.Count)];
         BranchController bBranch = listBranchInLevel[Random.Range(0, listBranchInLevel.Count)];
         int index = 0;
@@ -324,6 +348,16 @@ public class LevelManager : MonoBehaviour
             {
                 Debug.Log(aBranch.name + "-" + bBranch.name);
                 bBranch.ShuffBranch(aBranch);
+
+                Action a = () =>
+                {
+                    aBranch.ShuffBranch(bBranch);
+                };
+
+                UndoSystem.Instance.PushBackMovement(null, a);
+
+                UiController.Instance.UpdateBoosterShuff(GameInfo.Shuff);
+
                 return;
             }
             index++;
@@ -333,9 +367,17 @@ public class LevelManager : MonoBehaviour
         {
             if (listBranchInLevel[i] != aBranch)
             {
-                Debug.Log(aBranch.name + "-" + listBranchInLevel[i].name);
+                BranchController b = listBranchInLevel[i];
+                Debug.Log(aBranch.name + "-" + b.name);
 
-                aBranch.ShuffBranch(listBranchInLevel[i]);
+                aBranch.ShuffBranch(b);
+                Action a = () =>
+                {
+                    b.ShuffBranch(aBranch);
+                };
+                UndoSystem.Instance.PushBackMovement(null, a);
+                UiController.Instance.UpdateBoosterShuff(GameInfo.Shuff);
+
                 return;
             }
         }

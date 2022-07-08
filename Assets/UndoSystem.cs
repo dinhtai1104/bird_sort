@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using System;
 
@@ -17,6 +18,8 @@ public class UndoSystem : MonoBehaviour
 {
 	public static UndoSystem Instance;
 
+	
+
 	public List<AllMovement> stackMovement = new List<AllMovement>();
     private void Awake()
     {
@@ -28,10 +31,25 @@ public class UndoSystem : MonoBehaviour
 		stackMovement = new List<AllMovement>();
     }
 
-    public void PushBackMovement(List<Movement> listMovement)
+    public void PushBackMovement(List<Movement> listMovement, Action callback = null)
     {
-		stackMovement.Add(new AllMovement (listMovement));
+		AllMovement m = new AllMovement(listMovement);
+		m.callback = callback;
+		stackMovement.Add(m);
 		UiController.Instance.UpdateUndoBtn(true);
+
+		if (GameInfo.Level == 3 && !PlayerPrefs.HasKey("Tut_undo"))
+		{
+			UiGameplay.Instance.StartTutorial("Hello click this to undo last step",
+				() =>
+				{
+					PlayerPrefs.SetInt("Tut_undo", 1);
+				});
+			UiGameplay.Instance.OnTutorial_EnableButton(UiGameplay.Instance.canvasButtonUndo);
+		}
+
+		UiController.Instance.UpdateBoosterUndo(stackMovement.Count);
+
 	}
 
 	public bool CheckUndo()
@@ -42,13 +60,22 @@ public class UndoSystem : MonoBehaviour
 	public void Undo()
 	{
 		if (stackMovement.Count == 0) return;
-		List<Movement> undoList = stackMovement[stackMovement.Count - 1].movements;
+
+		AllMovement m = stackMovement[stackMovement.Count - 1];
+		List<Movement> undoList = m.movements;
 		stackMovement.RemoveAt(stackMovement.Count - 1);
+
+		UiController.Instance.UpdateBoosterUndo(stackMovement.Count);
 
 		if (stackMovement.Count == 0)
 		{
 			UiController.Instance.UpdateUndoBtn(false);
 		}
+		if (m.callback != null)
+        {
+			m.callback?.Invoke();
+			return;
+        }
 
 		//undoList = undoList.OrderBy(x => x.slot).ToList();
 		for (int i = 0; i < undoList.Count; i++)
@@ -81,15 +108,18 @@ public class UndoSystem : MonoBehaviour
 		return undoList;
 	}
 
-	public void SetLast(List<Movement> l)
+	public void SetLast(List<Movement> l, Action callback = null)
     {
-		stackMovement[stackMovement.Count - 1] = new AllMovement(l);
+		AllMovement m = new AllMovement(l);
+		m.callback = callback;
+		stackMovement[stackMovement.Count - 1] = m;
     }
 }
 
 [System.Serializable]
 public class AllMovement
 {
+	public Action callback;
 	public List<Movement> movements;
 	public AllMovement(List<Movement> m)
     {

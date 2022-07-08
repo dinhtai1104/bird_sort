@@ -22,7 +22,7 @@ public class UiMenu : MonoBehaviour
 
     public SkeletonGraphic skeletonGraphic;
     public Animator animator;
-    public Button playBtn;
+    public Button playBtn, settings;
 
     private System.Action callback;
     public void JoinGame(System.Action ac = null)
@@ -34,7 +34,13 @@ public class UiMenu : MonoBehaviour
 
     private void OnEnable()
     {
+        if (settings == null)
+        {
+            settings = UiController.Instance.settingsBtn;
+        }
+        settings.interactable = true;
         playBtn.interactable = true;
+
     }
     public void ChangeAnim(string ani)
     {

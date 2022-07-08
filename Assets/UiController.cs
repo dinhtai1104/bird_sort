@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 /* 
    **********************
 	Author : Taii
@@ -26,10 +27,31 @@ public class UiController : MonoBehaviour
         }
     }
 
-    public Button homeBtn, replayBtn, addBranchBtn, shuffleBtn, undoBtn;
+    public Button homeBtn, replayBtn, addBranchBtn, shuffleBtn, undoBtn, settingsBtn;
     public UiWin uiWin;
     public UiMenu menuUi;
     public UiGameplay gameplayUi;
+    public UiSettings settingsUi;
+
+    public TextMeshProUGUI levelText;
+
+
+    [Header("Booster Button - Undo")]
+    public GameObject countPanelUndo;
+    public TextMeshProUGUI countPanelUndoText;
+    public GameObject adsPanelUndo;
+
+    [Header("Booster Button - AddBranch")]
+    public GameObject countPanelAddBranch;
+    public TextMeshProUGUI countPanelAddBranchText;
+    public GameObject adsPanelAddBranch;
+
+    [Header("Booster Button - Shuff")]
+    public GameObject countPanelShuff;
+    public TextMeshProUGUI countPanelShuffText;
+    public GameObject adsPanelShuff;
+
+
     public void UpdateUndoBtn(bool interac)
     {
         undoBtn.interactable = interac;
@@ -42,6 +64,12 @@ public class UiController : MonoBehaviour
         StartCoroutine(WaitAction(1f, () => uiWin.gameObject.SetActive(true)));
     }
 
+
+    public void SettingsButtonOnClicked()
+    {
+        //settingsBtn.interactable = false;
+        settingsUi.gameObject.SetActive(true);
+    }
 
     public void PlayGameButtonOnClicked()
     {
@@ -67,11 +95,67 @@ public class UiController : MonoBehaviour
         replayBtn.interactable = true;
         addBranchBtn.interactable = false;
         shuffleBtn.interactable = false;
+        settingsBtn.interactable = false;
 
         //undoBtn.interactable = false;
         undoBtn.interactable = false;
         gameplayUi.JoinGame();
 
+
+        InitBooster();
+    }
+
+    public void InitBooster()
+    {
+        Debug.Log("ADd Branch: " + GameInfo.Branch);
+        UpdateBoosterBranch(GameInfo.Branch);
+        UpdateBoosterShuff(GameInfo.Shuff);
+        UpdateBoosterUndo(0);
+    }
+
+    public void UpdateBoosterBranch(int number)
+    {
+        if (number <= 0)
+        {
+            GameInfo.Branch = 0;
+            countPanelAddBranch.SetActive(false);
+            adsPanelAddBranch.SetActive(true);
+        } else
+        {
+            countPanelAddBranch.SetActive(true);
+            adsPanelAddBranch.SetActive(false);
+            countPanelAddBranchText.text = number.ToString();
+        }
+    }
+
+    public void UpdateBoosterUndo(int number)
+    {
+        if (number <= 0)
+        {
+            countPanelUndo.SetActive(false);
+        }
+        else
+        {
+            countPanelUndo.SetActive(true);
+            adsPanelUndo.SetActive(false);
+            countPanelUndoText.text = number.ToString();
+        }
+    }
+
+    public void UpdateBoosterShuff(int number)
+    {
+        if (number <= 0)
+        {
+            GameInfo.Shuff = 0;
+            adsPanelShuff.SetActive(true);
+            countPanelShuff.SetActive(false);
+        }
+        else
+        {
+            adsPanelShuff.SetActive(false);
+            countPanelShuff.SetActive(true);
+            countPanelShuffText.text = number.ToString();
+        }
     }
 
     public void DisableButtonsJoinGame()
@@ -116,18 +200,63 @@ public class UiController : MonoBehaviour
 
     public void AddNewBranchButtonOnClicked()
     {
-        //addBranchBtn.interactable = false;
-        GameController.Instance.AddNewBranch();
+        if (GameInfo.Branch <= 0)
+        {
+
+            return;
+        }
+        addBranchBtn.interactable = false;
+        if (!PlayerPrefs.HasKey("Tut_addBranch") && GameInfo.Level == 2)
+        {
+            UiGameplay.Instance.SetCallbackTut(() =>
+            {
+                GameController.Instance.AddNewBranch();
+                PlayerPrefs.SetInt("Tut_addBranch", 1);
+                //addBranchBtn.interactable = GameController.Instance.levelManger.getTotalBranch() < 12;
+                addBranchBtn.interactable = true;
+            });
+            TutorialBird.Instance?.EndTutorial();
+        }
+        else 
+        {
+            addBranchBtn.interactable = true;
+            GameController.Instance.AddNewBranch();
+        }
+
     }
 
     public void ShuffleButtonOnClicked()
     {
         //shuffleBtn.interactable = false;
+        if (GameInfo.Shuff <= 0)
+        {
+
+            return;
+        }
         GameController.Instance.ShuffleBird();
     }
 
     public void UndoButtonOnClicked()
     {
-        GameController.Instance.Undo();
+        undoBtn.interactable = false;
+        if (!PlayerPrefs.HasKey("Tut_undo") && GameInfo.Level == 3) 
+        {
+            TutorialBird.Instance?.EndTutorial();
+            UiGameplay.Instance.SetCallbackTut(() =>
+            {
+                PlayerPrefs.SetInt("Tut_undo", 1);
+                GameController.Instance.Undo();
+                UpdateUndoBtn(UndoSystem.Instance.CheckUndo());
+            });
+        } else
+        {
+            GameController.Instance.Undo();
+            UpdateUndoBtn(UndoSystem.Instance.CheckUndo());
+        }
+    }
+
+    public void SetTextLevel(int pLevel)
+    {
+        levelText.text = "Level " + pLevel.ToString("00");
     }
 }

@@ -27,9 +27,8 @@ public class UiWin : MonoBehaviour
 
     private void OnEnable()
     {
-        GameController.Instance.pLevel++;
+        GameInfo.Level++;
 
-        PlayerPrefs.SetInt("Level", GameController.Instance.pLevel);
         //ChangeAnim(BirdAnimation.IDLE);
         nextLevelButton.interactable = true;
     }
